@@ -168,8 +168,10 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; back
   .sidebar { transform: translateX(-100%); }
   .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
   .main { margin-left: 0; padding: 24px 20px 60px; }
+  .sidebar-spacer { display: none; }
   .hamburger { display: block; }
   .header-search { max-width: 280px; }
+  .breadcrumb { flex-wrap: wrap; font-size: 0.75rem; }
 }
 @media (max-width: 600px) {
   .header-search { display: none; }
