@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenClaw Learn — Documentation & Guides</title>
+<meta name="description" content="Learn OpenClaw: the self-hosted multi-channel AI agent gateway. Guides, tutorials, and reference for WhatsApp, Telegram, Discord, and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #FF6B6B;
+  --primary-hover: #ff5252;
+  --primary-light: #fff0f0;
+  --accent: #1a1a2e;
+  --bg: #ffffff;
+  --bg-alt: #f8fafc;
+  --bg-code: #f1f5f9;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --border: #e2e8f0;
+  --sidebar-w: 280px;
+  --toc-w: 240px;
+  --header-h: 64px;
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-lg: 0 4px 24px rgba(0,0,0,0.1);
+  --transition: 0.2s ease;
+}
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --bg-alt: #1e293b;
+  --bg-code: #1e293b;
+  --text: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border: #334155;
+  --primary-light: #2d1b1b;
+  --shadow: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-lg: 0 4px 24px rgba(0,0,0,0.4);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 24px); }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; transition: background var(--transition), color var(--transition); }
+
+/* Header */
+.header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-h); background: var(--bg); border-bottom: 1px solid var(--border); z-index: 100; display: flex; align-items: center; padding: 0 24px; gap: 16px; transition: background var(--transition), border-color var(--transition); backdrop-filter: blur(8px); }
+.header-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.2rem; color: var(--text); text-decoration: none; cursor: pointer; flex-shrink: 0; }
+.header-logo span { color: var(--primary); }
+.header-search { flex: 1; max-width: 480px; margin: 0 auto; position: relative; }
+.header-search input { width: 100%; padding: 8px 16px 8px 40px; border: 1px solid var(--border); border-radius: 9999px; background: var(--bg-alt); color: var(--text); font-size: 0.875rem; outline: none; transition: border-color var(--transition), background var(--transition); }
+.header-search input:focus { border-color: var(--primary); }
+.header-search svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--text-muted); }
+.header-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.header-actions a { color: var(--text-secondary); text-decoration: none; padding: 6px; border-radius: 6px; display: flex; align-items: center; }
+.header-actions a:hover { color: var(--primary); background: var(--primary-light); }
+.theme-toggle { background: none; border: none; cursor: pointer; padding: 6px; border-radius: 6px; color: var(--text-secondary); display: flex; align-items: center; }
+.theme-toggle:hover { color: var(--primary); background: var(--primary-light); }
+.hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; color: var(--text); }
+.hamburger svg { width: 24px; height: 24px; }
+
+/* Layout */
+.layout { display: flex; margin-top: var(--header-h); min-height: calc(100vh - var(--header-h)); }
+
+/* Sidebar */
+.sidebar { width: var(--sidebar-w); flex-shrink: 0; position: fixed; top: var(--header-h); bottom: 0; left: 0; overflow-y: auto; padding: 24px 16px; border-right: 1px solid var(--border); background: var(--bg); transition: transform 0.3s ease, background var(--transition); z-index: 90; }
+.sidebar-section { margin-bottom: 24px; }
+.sidebar-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); padding: 0 12px; margin-bottom: 6px; }
+.sidebar-link { display: block; padding: 6px 12px; border-radius: 6px; color: var(--text-secondary); text-decoration: none; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all var(--transition); }
+.sidebar-link:hover { color: var(--primary); background: var(--primary-light); }
+.sidebar-link.active { color: var(--primary); background: var(--primary-light); font-weight: 600; }
+
+/* Main */
+.main { flex: 1; margin-left: var(--sidebar-w); padding: 40px 48px 80px; max-width: 860px; min-width: 0; }
+
+/* TOC */
+.toc { width: var(--toc-w); flex-shrink: 0; position: fixed; top: var(--header-h); right: 0; bottom: 0; overflow-y: auto; padding: 24px 16px; border-left: 1px solid var(--border); background: var(--bg); transition: background var(--transition); }
+.toc-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 12px; }
+.toc-link { display: block; padding: 3px 0; color: var(--text-muted); text-decoration: none; font-size: 0.8rem; transition: color var(--transition); border-left: 2px solid transparent; padding-left: 12px; }
+.toc-link:hover, .toc-link.active { color: var(--primary); border-left-color: var(--primary); }
+.toc-link.depth-3 { padding-left: 24px; font-size: 0.75rem; }
+
+/* Article */
+.breadcrumb { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.breadcrumb a { color: var(--text-muted); text-decoration: none; }
+.breadcrumb a:hover { color: var(--primary); }
+.breadcrumb .sep { opacity: 0.5; }
+.article-meta { display: flex; gap: 16px; align-items: center; margin-bottom: 24px; font-size: 0.8rem; color: var(--text-muted); flex-wrap: wrap; }
+.article-meta svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px; }
+
+.article h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; line-height: 1.2; }
+.article h2 { font-size: 1.4rem; font-weight: 700; margin-top: 48px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.article h3 { font-size: 1.1rem; font-weight: 600; margin-top: 32px; margin-bottom: 12px; }
+.article p { margin-bottom: 16px; }
+.article ul, .article ol { margin-bottom: 16px; padding-left: 24px; }
+.article li { margin-bottom: 6px; }
+.article a { color: var(--primary); text-decoration: none; font-weight: 500; }
+.article a:hover { text-decoration: underline; }
+.article strong { font-weight: 600; }
+.article img { max-width: 100%; border-radius: var(--radius); margin: 16px 0; }
+.article hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+/* Code */
+.article code { font-family: 'JetBrains Mono', monospace; font-size: 0.85em; background: var(--bg-code); padding: 2px 6px; border-radius: 4px; }
+.code-block { position: relative; margin: 16px 0; border-radius: var(--radius); overflow: hidden; background: var(--accent); }
+[data-theme="dark"] .code-block { background: #0d1117; }
+.code-header { display: flex; justify-content: space-between; align-items: center; padding: 8px 16px; font-size: 0.75rem; color: #8b949e; border-bottom: 1px solid #21262d; }
+.code-header .lang { text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; }
+.copy-btn { background: none; border: 1px solid #30363d; color: #8b949e; padding: 3px 10px; border-radius: 4px; cursor: pointer; font-size: 0.7rem; font-family: inherit; transition: all var(--transition); }
+.copy-btn:hover { background: #30363d; color: #e6edf3; }
+.copy-btn.copied { color: #3fb950; border-color: #3fb950; }
+.code-block pre { margin: 0; padding: 16px; overflow-x: auto; }
+.code-block code { background: none; padding: 0; color: #e6edf3; font-size: 0.85rem; line-height: 1.6; }
+
+/* Callouts */
+.callout { padding: 16px 20px; border-radius: var(--radius); margin: 16px 0; border-left: 4px solid; font-size: 0.9rem; }
+.callout-title { font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+.callout-title svg { width: 18px; height: 18px; flex-shrink: 0; }
+.callout.info { background: #eff6ff; border-color: #3b82f6; }
+.callout.info .callout-title { color: #1d4ed8; }
+[data-theme="dark"] .callout.info { background: #1e2a3e; }
+.callout.warning { background: #fefce8; border-color: #eab308; }
+.callout.warning .callout-title { color: #a16207; }
+[data-theme="dark"] .callout.warning { background: #2a2a1e; }
+.callout.tip { background: #f0fdf4; border-color: #22c55e; }
+.callout.tip .callout-title { color: #15803d; }
+[data-theme="dark"] .callout.tip { background: #1a2e1a; }
+
+/* Steps */
+.steps { counter-reset: step; margin: 24px 0; }
+.step { position: relative; padding-left: 48px; margin-bottom: 32px; }
+.step::before { counter-increment: step; content: counter(step); position: absolute; left: 0; top: 0; width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: #fff; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; }
+.step-title { font-weight: 600; font-size: 1rem; margin-bottom: 8px; }
+
+/* Nav */
+.article-nav { display: flex; justify-content: space-between; gap: 16px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+.nav-link { flex: 1; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; color: var(--text); transition: all var(--transition); cursor: pointer; }
+.nav-link:hover { border-color: var(--primary); background: var(--primary-light); }
+.nav-link-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.nav-link-title { font-weight: 600; color: var(--primary); }
+.nav-link.next { text-align: right; }
+
+/* Article footer */
+.article-footer { display: flex; gap: 16px; margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 0.85rem; }
+.article-footer a { color: var(--text-muted); text-decoration: none; display: flex; align-items: center; gap: 6px; }
+.article-footer a:hover { color: var(--primary); }
+.article-footer svg { width: 16px; height: 16px; }
+
+/* Search overlay */
+.search-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+.search-overlay.active { display: flex; justify-content: center; padding-top: 120px; }
+.search-modal { background: var(--bg); border-radius: 12px; width: 560px; max-height: 60vh; overflow: hidden; box-shadow: var(--shadow-lg); }
+.search-modal input { width: 100%; padding: 16px 20px; border: none; border-bottom: 1px solid var(--border); background: transparent; color: var(--text); font-size: 1rem; outline: none; }
+.search-results { overflow-y: auto; max-height: calc(60vh - 56px); }
+.search-result { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid var(--border); transition: background var(--transition); }
+.search-result:hover, .search-result.selected { background: var(--primary-light); }
+.search-result-title { font-weight: 600; font-size: 0.9rem; }
+.search-result-section { font-size: 0.75rem; color: var(--text-muted); }
+.search-empty { padding: 24px 20px; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .toc { display: none; }
+}
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
+  .main { margin-left: 0; padding: 24px 20px 60px; }
+  .hamburger { display: block; }
+  .header-search { max-width: 280px; }
+}
+@media (max-width: 600px) {
+  .header-search { display: none; }
+  .article h1 { font-size: 1.5rem; }
+  .article-nav { flex-direction: column; }
+}
+
+/* Animations */
+.fade-in { animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* Syntax highlighting */
+.token-keyword { color: #ff7b72; }
+.token-string { color: #a5d6ff; }
+.token-comment { color: #8b949e; font-style: italic; }
+.token-function { color: #d2a8ff; }
+.token-number { color: #79c0ff; }
+.token-operator { color: #ff7b72; }
+.token-property { color: #79c0ff; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+  </button>
+  <a class="header-logo" onclick="navigate('what-is-openclaw')">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#FF6B6B" stroke-width="2"/><path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="#FF6B6B" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="10" r="1" fill="#FF6B6B"/><circle cx="15" cy="10" r="1" fill="#FF6B6B"/></svg>
+    Open<span>Claw</span> Learn
+  </a>
+  <div class="header-search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input type="text" placeholder="Search docs... (Ctrl+K)" onclick="openSearch()" readonly>
+  </div>
+  <div class="header-actions">
+    <a href="https://github.com/openclaw" target="_blank" title="GitHub" aria-label="GitHub">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+    </a>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Toggle theme">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="sun-icon"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="moon-icon" style="display:none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- Search Overlay -->
+<div class="search-overlay" id="searchOverlay" onclick="if(event.target===this)closeSearch()">
+  <div class="search-modal">
+    <input type="text" id="searchInput" placeholder="Search documentation..." oninput="doSearch(this.value)">
+    <div class="search-results" id="searchResults">
+      <div class="search-empty">Type to search across all documentation</div>
+    </div>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<nav class="sidebar" id="sidebar"></nav>
+
+<!-- Layout -->
+<div class="layout">
+  <div style="width: var(--sidebar-w); flex-shrink: 0;" class="sidebar-spacer"></div>
+  <main class="main" id="mainContent"></main>
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<script>
+// ============ CONTENT DATA ============
+const articles = {
+  // ---- Getting Started ----
+  "what-is-openclaw": {
+    title: "What is OpenClaw?",
+    section: "Getting Started",
+    readTime: 5,
+    updated: "2026-03-28",
+    content: `
+<p>OpenClaw is a <strong>self-hosted gateway</strong> that connects your favorite chat apps — WhatsApp, Telegram, Discord, iMessage, Slack, and more — to AI coding agents. You run a single Gateway process on your own machine (or a server), and it becomes the bridge between your messaging apps and an always-available AI assistant.</p>
+
+<div class="callout info"><div class="callout-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Key Concept</div>Think of OpenClaw as a personal AI gateway — your own "Jarvis" that you can message from any device, any app, anywhere.</div>
+
+<h2 id="who-is-it-for">Who is it for?</h2>
+<p>Developers and power users who want a personal AI assistant they can message from anywhere — without giving up control of their data or relying on a hosted service.</p>
+
+<h2 id="what-makes-it-different">What makes it different?</h2>
+<ul>
+<li><strong>Self-hosted</strong> — runs on your hardware, your rules. Your data never leaves your machine.</li>
+<li><strong>Multi-channel</strong> — one Gateway serves WhatsApp, Telegram, Discord, Slack, iMessage, Signal, and more simultaneously.</li>
+<li><strong>Agent-native</strong> — built for coding agents with tool use, sessions, memory, and multi-agent routing.</li>
+<li><strong>Open source</strong> — MIT licensed, community-driven.</li>
+<li><strong>Skills system</strong> — extend your agent's capabilities through <a href="#" onclick="navigate('what-are-skills');return false">Skills</a> — modular instruction sets that teach your agent new abilities.</li>
+</ul>
+
+<h2 id="how-it-works">How it works</h2>
+<p>The architecture is simple: the Gateway sits at the center, routing messages between your chat apps and the AI agent.</p>
+
+${codeBlock('text', `Chat Apps (WhatsApp, Telegram, Discord...)
+          ↓
+    ┌─────────────┐
+    │   Gateway    │  ← Your machine or VPS
+    └─────────────┘
+          ↓
+    AI Agent (Claude, GPT, Gemini...)
+          ↓
+    Tools (exec, browser, skills...)`)}
+
+<p>The Gateway is the single source of truth for sessions, routing, and channel connections. It manages:</p>
+<ul>
+<li><strong>Session isolation</strong> — each conversation gets its own context</li>
+<li><strong>Access control</strong> — pairing codes, allowlists, and DM policies</li>
+<li><strong>Media handling</strong> — images, audio, and documents flow through naturally</li>
+<li><strong>Multi-agent routing</strong> — run multiple agents with separate workspaces</li>
+</ul>
+
+<h2 id="what-you-need">What you need</h2>
+<ul>
+<li><strong>Node.js 24</strong> (recommended) or Node 22 LTS (22.14+)</li>
+<li><strong>An API key</strong> from a model provider (Anthropic, OpenAI, Google, etc.)</li>
+<li><strong>5 minutes</strong> — that's all it takes to get running</li>
+</ul>
+
+<h2 id="supported-channels">Supported channels</h2>
+<p>OpenClaw supports an impressive range of messaging platforms:</p>
+<ul>
+<li>WhatsApp (via WhatsApp Web / Baileys)</li>
+<li>Telegram (Bot API via grammY)</li>
+<li>Discord</li>
+<li>Slack (Socket Mode + HTTP Events)</li>
+<li>iMessage (via BlueBubbles)</li>
+<li>Signal (via signal-cli)</li>
+<li>Microsoft Teams</li>
+<li>Google Chat</li>
+<li>Matrix</li>
+<li>Mattermost</li>
+<li>IRC, Nostr, LINE, Feishu, Zalo, and more via plugins</li>
+</ul>
+
+<h2 id="next-steps">Next steps</h2>
+<p>Ready to get started? Head to the <a href="#" onclick="navigate('quick-start');return false">Quick Start</a> guide to have OpenClaw running in 5 minutes.</p>
+`
+  },
+
+  "why-openclaw": {
+    title: "Why OpenClaw?",
+    section: "Getting Started",
+    readTime: 3,
+    updated: "2026-03-28",
+    content: `
+<p>There are many AI assistants available today. Here's why OpenClaw stands out:</p>
+
+<h2 id="own-your-data">Own your data</h2>
+<p>OpenClaw runs on <strong>your</strong> hardware. Your conversations, files, and agent workspace never leave your machine. No cloud provider sees your data, no third-party stores your chat history.</p>
+
+<h2 id="one-agent-everywhere">One agent, everywhere</h2>
+<p>Instead of separate AI tools for different platforms, OpenClaw gives you <strong>one agent</strong> accessible from WhatsApp, Telegram, Discord, Slack, iMessage, and more — simultaneously. Message from your phone, get a response on your desktop.</p>
+
+<h2 id="real-tool-use">Real tool use</h2>
+<p>OpenClaw agents aren't just chatbots. They can execute code, browse the web, manage files, run shell commands, and interact with external APIs through the skills system. It's a true AI assistant, not just a text generator.</p>
+
+<h2 id="extensible">Fully extensible</h2>
+<p>The <a href="#" onclick="navigate('what-are-skills');return false">Skills</a> system lets you teach your agent new abilities. The <a href="#" onclick="navigate('clawhub');return false">ClawHub marketplace</a> has community-contributed skills ready to install with a single command.</p>
+
+<h2 id="open-source">Open source & community-driven</h2>
+<p>MIT licensed. No vendor lock-in. A growing community of developers building the future of personal AI assistants.</p>
+`
+  },
+
+  "quick-start": {
+    title: "Quick Start",
+    section: "Getting Started",
+    readTime: 5,
+    updated: "2026-03-28",
+    content: `
+<p>Get OpenClaw installed and chatting in about 5 minutes. By the end you'll have a running Gateway, configured auth, and a working chat session.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><strong>Node.js 24</strong> (recommended) or Node 22 LTS (22.14+). Check with <code>node --version</code></li>
+<li><strong>An API key</strong> from a model provider (Anthropic, OpenAI, Google, etc.)</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Tip</div>For the best experience, use the strongest latest-generation model available (like Claude Opus or GPT-5).</div>
+
+<h2 id="install">Step-by-step installation</h2>
+
+<div class="steps">
+<div class="step">
+<div class="step-title">Install OpenClaw</div>
+<p>On macOS or Linux, run the installer:</p>
+${codeBlock('bash', `curl -fsSL https://openclaw.ai/install.sh | bash`)}
+<p>On Windows (PowerShell):</p>
+${codeBlock('powershell', `iwr -useb https://openclaw.ai/install.ps1 | iex`)}
+<p>Or install via npm:</p>
+${codeBlock('bash', `npm install -g openclaw@latest`)}
+</div>
+
+<div class="step">
+<div class="step-title">Run onboarding</div>
+<p>The onboarding wizard walks you through choosing a model provider, setting an API key, and configuring the Gateway:</p>
+${codeBlock('bash', `openclaw onboard --install-daemon`)}
+<p>This takes about 2 minutes. The <code>--install-daemon</code> flag also sets up the Gateway as a system service so it starts automatically.</p>
+</div>
+
+<div class="step">
+<div class="step-title">Verify the Gateway is running</div>
+${codeBlock('bash', `openclaw gateway status`)}
+<p>You should see the Gateway listening on port <code>18789</code>.</p>
+</div>
+
+<div class="step">
+<div class="step-title">Open the dashboard</div>
+${codeBlock('bash', `openclaw dashboard`)}
+<p>This opens the Control UI in your browser at <a href="http://127.0.0.1:18789/" target="_blank">http://127.0.0.1:18789/</a>.</p>
+</div>
+
+<div class="step">
+<div class="step-title">Send your first message</div>
+<p>Type a message in the Control UI chat and you should get an AI reply. 🎉</p>
+<p>Want to chat from your phone? The fastest channel to set up is <a href="#" onclick="navigate('telegram');return false">Telegram</a> (just a bot token).</p>
+</div>
+</div>
+
+<h2 id="whats-next">What's next</h2>
+<ul>
+<li><a href="#" onclick="navigate('telegram');return false">Connect Telegram</a> — fastest channel to set up</li>
+<li><a href="#" onclick="navigate('whatsapp');return false">Connect WhatsApp</a> — message from your existing number</li>
+<li><a href="#" onclick="navigate('gateway-setup');return false">Configure the Gateway</a> — models, security, and more</li>
+<li><a href="#" onclick="navigate('what-are-skills');return false">Explore Skills</a> — extend your agent's capabilities</li>
+</ul>
+`
+  },
+
+  "architecture": {
+    title: "Architecture Overview",
+    section: "Getting Started",
+    readTime: 4,
+    updated: "2026-03-28",
+    content: `
+<p>Understanding OpenClaw's architecture helps you configure, troubleshoot, and extend it effectively.</p>
+
+<h2 id="core-components">Core components</h2>
+<ul>
+<li><strong>Gateway</strong> — the central process that manages all connections, sessions, and routing</li>
+<li><strong>Agent</strong> — the AI model (Claude, GPT, Gemini) that processes messages and uses tools</li>
+<li><strong>Channels</strong> — adapters for each messaging platform (WhatsApp, Telegram, etc.)</li>
+<li><strong>Skills</strong> — instruction sets that teach the agent how to use tools</li>
+<li><strong>Nodes</strong> — iOS/Android companion apps for camera, voice, and Canvas workflows</li>
+<li><strong>Control UI</strong> — web-based dashboard for chat, config, and session management</li>
+</ul>
+
+<h2 id="message-flow">Message flow</h2>
+${codeBlock('text', `1. User sends message via WhatsApp/Telegram/etc.
+2. Channel adapter receives the message
+3. Gateway routes it to the correct agent session
+4. Agent processes the message (may use tools)
+5. Response flows back through the Gateway
+6. Channel adapter delivers the reply`)}
+
+<h2 id="configuration">Configuration</h2>
+<p>OpenClaw reads configuration from <code>~/.openclaw/openclaw.json</code> (JSON5 format). The config controls:</p>
+<ul>
+<li>Channel connections and access policies</li>
+<li>Model selection and provider credentials</li>
+<li>Agent workspaces and session behavior</li>
+<li>Security settings (pairing, allowlists, sandboxing)</li>
+</ul>
+
+<h2 id="sessions">Sessions</h2>
+<p>Each conversation gets an isolated session with its own context window. Sessions can be per-sender, per-channel, or per-agent depending on your configuration.</p>
+
+<h2 id="workspace">Workspace</h2>
+<p>The agent workspace (default: <code>~/.openclaw/workspace</code>) is where the agent reads and writes files. It contains memory files, skills, tools configuration, and any project files the agent works with.</p>
+`
+  },
+
+  // ---- Installation ----
+  "ubuntu": {
+    title: "Ubuntu / Debian Installation",
+    section: "Installation",
+    readTime: 6,
+    updated: "2026-03-28",
+    content: `
+<p>Install OpenClaw on Ubuntu, Debian, or any apt-based Linux distribution.</p>
+
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li>Ubuntu 22.04+ or Debian 12+</li>
+<li>Node.js 24 (recommended) or Node.js 22.14+</li>
+<li>At least 1 GB RAM (2 GB recommended)</li>
+<li>An API key from a model provider</li>
+</ul>
+
+<h2 id="install-steps">Installation steps</h2>
+
+<div class="steps">
+<div class="step">
+<div class="step-title">Install Node.js</div>
+<p>If you don't have Node.js 24, install it via NodeSource:</p>
+${codeBlock('bash', `curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
+sudo apt-get install -y nodejs`)}
+<p>Verify the installation:</p>
+${codeBlock('bash', `node --version   # Should show v24.x.x
+npm --version    # Should show 10.x.x+`)}
+</div>
+
+<div class="step">
+<div class="step-title">Install OpenClaw</div>
+<p>Use the official installer script:</p>
+${codeBlock('bash', `curl -fsSL https://openclaw.ai/install.sh | bash`)}
+<p>Or install via npm:</p>
+${codeBlock('bash', `npm install -g openclaw@latest`)}
+</div>
+
+<div class="step">
+<div class="step-title">Run onboarding</div>
+${codeBlock('bash', `openclaw onboard --install-daemon`)}
+<p>The wizard will:</p>
+<ul>
+<li>Ask you to choose a model provider (Anthropic, OpenAI, Google, etc.)</li>
+<li>Prompt for your API key</li>
+<li>Configure the Gateway</li>
+<li>Install the Gateway as a systemd service</li>
+</ul>
+</div>
+
+<div class="step">
+<div class="step-title">Verify the Gateway</div>
+${codeBlock('bash', `openclaw gateway status`)}
+<p>You should see the Gateway listening on port 18789.</p>
+</div>
+
+<div class="step">
+<div class="step-title">Open the dashboard</div>
+${codeBlock('bash', `openclaw dashboard`)}
+<p>If you're on a headless server, access the Control UI at <code>http://your-server-ip:18789</code>.</p>
+</div>
+</div>
+
+<h2 id="service-management">Service management</h2>
+<p>The Gateway runs as a systemd service. Manage it with:</p>
+${codeBlock('bash', `openclaw gateway status     # Check status
+openclaw gateway start      # Start the gateway
+openclaw gateway stop       # Stop the gateway
+openclaw gateway restart    # Restart the gateway`)}
+
+<h2 id="firewall">Firewall configuration</h2>
+<p>If you need remote access to the Control UI:</p>
+${codeBlock('bash', `sudo ufw allow 18789/tcp`)}
+
+<div class="callout warning"><div class="callout-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>Warning</div>Only expose port 18789 if you understand the security implications. For remote access, consider using <strong>Tailscale</strong> or SSH tunneling instead.</div>
+
+<h2 id="updating">Updating</h2>
+${codeBlock('bash', `npm update -g openclaw
+openclaw gateway restart`)}
+`
+  },
+
+  "docker": {
+    title: "Docker Installation",
+    section: "Installation",
+    readTime: 5,
+    updated: "2026-03-28",
+    content: `
+<p>Run OpenClaw in a Docker container for an isolated, reproducible environment.</p>
+
+<div class="callout info"><div class="callout-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Note</div>Docker is <strong>optional</strong>. Use it only if you want a containerized gateway. The normal install flow (npm/installer) is simpler for personal use.</div>
+
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Docker Desktop (or Docker Engine) + Docker Compose v2</li>
+<li>At least 2 GB RAM (the build process may OOM-kill on 1 GB hosts)</li>
+<li>An API key from a model provider</li>
+</ul>
+
+<h2 id="install-steps">Installation steps</h2>
+
+<div class="steps">
+<div class="step">
+<div class="step-title">Pull or build the image</div>
+<p>Use a pre-built image from GitHub Container Registry:</p>
+${codeBlock('bash', `docker pull ghcr.io/openclaw/openclaw:latest`)}
+<p>Or build from source:</p>
+${codeBlock('bash', `git clone https://github.com/openclaw/openclaw.git
+cd openclaw
+./scripts/docker/setup.sh`)}
+</div>
+
+<div class="step">
+<div class="step-title">Run onboarding</div>
+<p>The setup script runs onboarding automatically. It will prompt for your API keys and configure the Gateway.</p>
+<p>If using the pre-built image:</p>
+${codeBlock('bash', `export OPENCLAW_IMAGE="ghcr.io/openclaw/openclaw:latest"
+./scripts/docker/setup.sh`)}
+</div>
+
+<div class="step">
+<div class="step-title">Open the Control UI</div>
+<p>Access the dashboard at <a href="http://127.0.0.1:18789/" target="_blank">http://127.0.0.1:18789/</a> and paste the token from setup into Settings.</p>
+${codeBlock('bash', `# If you need the URL again:
+docker compose run --rm openclaw-cli dashboard --no-open`)}
+</div>
+
+<div class="step">
+<div class="step-title">Configure channels (optional)</div>
+<p>Use the CLI container to add messaging channels:</p>
+${codeBlock('bash', `# WhatsApp (QR login)
+docker compose run --rm openclaw-cli channels login --channel whatsapp
+
+# Telegram (bot token)
+docker compose run --rm openclaw-cli config set channels.telegram.botToken "YOUR_TOKEN"`)}
+</div>
+</div>
+
+<h2 id="docker-compose">Docker Compose reference</h2>
+<p>The default <code>docker-compose.yml</code> exposes port 18789 and mounts <code>~/.openclaw</code> for persistent state.</p>
+
+<h2 id="updating">Updating</h2>
+${codeBlock('bash', `docker pull ghcr.io/openclaw/openclaw:latest
+docker compose up -d`)}
+`
+  },
+
+  "azure": {
+    title: "Azure VM Installation",
+    section: "Installation",
+    readTime: 10,
+    updated: "2026-03-28",
+    content: `
+<p>Run OpenClaw 24/7 on an Azure Linux VM with Network Security Group hardening and Azure Bastion for secure SSH access.</p>
+
+<h2 id="what-you-need">What you need</h2>
+<ul>
+<li>An Azure subscription</li>
+<li>Azure CLI installed (<a href="https://learn.microsoft.com/cli/azure/install-azure-cli" target="_blank">install guide</a>)</li>
+<li>An SSH key pair</li>
+<li>~20-30 minutes</li>
+</ul>
+
+<h2 id="deploy">Deployment steps</h2>
+
+<div class="steps">
+<div class="step">
+<div class="step-title">Sign in to Azure CLI</div>
+${codeBlock('bash', `az login
+az extension add -n ssh`)}
+</div>
+
+<div class="step">
+<div class="step-title">Set deployment variables</div>
+${codeBlock('bash', `RG="rg-openclaw"
+LOCATION="westus2"
+VNET_NAME="vnet-openclaw"
+VNET_PREFIX="10.40.0.0/16"
+VM_SUBNET_NAME="snet-openclaw-vm"
+VM_SUBNET_PREFIX="10.40.2.0/24"
+BASTION_SUBNET_PREFIX="10.40.1.0/26"
+NSG_NAME="nsg-openclaw-vm"
+VM_NAME="vm-openclaw"
+ADMIN_USERNAME="openclaw"
+BASTION_NAME="bas-openclaw"
+BASTION_PIP_NAME="pip-openclaw-bastion"`)}
+</div>
+
+<div class="step">
+<div class="step-title">Create resource group and networking</div>
+${codeBlock('bash', `# Resource group
+az group create --name $RG --location $LOCATION
+
+# Virtual network + subnets
+az network vnet create \\
+  --resource-group $RG --name $VNET_NAME \\
+  --address-prefix $VNET_PREFIX \\
+  --subnet-name $VM_SUBNET_NAME \\
+  --subnet-prefix $VM_SUBNET_PREFIX
+
+az network vnet subnet create \\
+  --resource-group $RG --vnet-name $VNET_NAME \\
+  --name AzureBastionSubnet \\
+  --address-prefix $BASTION_SUBNET_PREFIX
+
+# Network Security Group
+az network nsg create --resource-group $RG --name $NSG_NAME`)}
+</div>
+
+<div class="step">
+<div class="step-title">Create the VM</div>
+${codeBlock('bash', `az vm create \\
+  --resource-group $RG \\
+  --name $VM_NAME \\
+  --image Canonical:ubuntu-24_04-lts:server:latest \\
+  --size Standard_B2s \\
+  --admin-username $ADMIN_USERNAME \\
+  --ssh-key-values ~/.ssh/id_rsa.pub \\
+  --vnet-name $VNET_NAME \\
+  --subnet $VM_SUBNET_NAME \\
+  --nsg $NSG_NAME \\
+  --public-ip-address ""`)}
+<p>Note: <code>--public-ip-address ""</code> means no public IP. Access is via Bastion only.</p>
+</div>
+
+<div class="step">
+<div class="step-title">Set up Azure Bastion</div>
+${codeBlock('bash', `az network public-ip create \\
+  --resource-group $RG --name $BASTION_PIP_NAME \\
+  --sku Standard --allocation-method Static
+
+az network bastion create \\
+  --resource-group $RG --name $BASTION_NAME \\
+  --public-ip-address $BASTION_PIP_NAME \\
+  --vnet-name $VNET_NAME \\
+  --sku Standard \\
+  --enable-tunneling true`)}
+</div>
+
+<div class="step">
+<div class="step-title">SSH via Bastion and install OpenClaw</div>
+${codeBlock('bash', `# Connect via Bastion
+az ssh vm --resource-group $RG --vm-name $VM_NAME
+
+# Once connected, install OpenClaw:
+curl -fsSL https://openclaw.ai/install.sh | bash
+openclaw onboard --install-daemon`)}
+</div>
+
+<div class="step">
+<div class="step-title">Verify</div>
+${codeBlock('bash', `openclaw gateway status`)}
+</div>
+</div>
+
+<div class="callout tip"><div class="callout-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Tip</div>For remote access to the Control UI, use <strong>Tailscale</strong> or an SSH tunnel: <code>az ssh vm --resource-group $RG --vm-name $VM_NAME -- -L 18789:127.0.0.1:18789</code></div>
+`
+  },
+
+  "macos": {
+    title: "macOS Installation",
+    section: "Installation",
+    readTime: 3,
+    updated: "2026-03-28",
+    content: `
+<p>Install OpenClaw on macOS in minutes.</p>
+<h2 id="install">Installation</h2>
+<div class="steps">
+<div class="step"><div class="step-title">Install via the installer script</div>
+${codeBlock('bash', `curl -fsSL https://openclaw.ai/install.sh | bash`)}
+<p>This installs Node.js (if needed) and OpenClaw.</p></div>
+<div class="step"><div class="step-title">Run onboarding</div>
+${codeBlock('bash', `openclaw onboard --install-daemon`)}
+</div>
+<div class="step"><div class="step-title">Open the dashboard</div>
+${codeBlock('bash', `openclaw dashboard`)}
+</div></div>
+<p>There is also a native <strong>OpenClaw.app</strong> for macOS available from the project releases.</p>
+`
+  },
+
+  "kubernetes": {
+    title: "Kubernetes",
+    section: "Installation",
+    readTime: 4,
+    updated: "2026-03-28",
+    content: `<p>Deploy OpenClaw on Kubernetes for scalable, production-grade deployments. See the <a href="https://github.com/openclaw/openclaw" target="_blank">GitHub repository</a> for Helm charts and manifests.</p>
+<h2 id="overview">Overview</h2>
+<p>Kubernetes deployment is suitable for teams running multiple agents or needing high availability. The Gateway runs as a Deployment with persistent volume claims for state.</p>
+<div class="callout info"><div class="callout-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Note</div>For most personal use cases, a single VM or Docker install is simpler and more cost-effective.</div>`
+  },
+
+  "raspberry-pi": {
+    title: "Raspberry Pi",
+    section: "Installation",
+    readTime: 3,
+    updated: "2026-03-28",
+    content: `<p>OpenClaw runs great on a Raspberry Pi 4 or 5 — perfect for a low-power, always-on personal AI gateway.</p>
+<h2 id="requirements">Requirements</h2>
+<ul><li>Raspberry Pi 4 (2GB+) or Pi 5</li><li>Raspberry Pi OS (64-bit recommended)</li><li>Node.js 22.14+ or 24</li></ul>
+<h2 id="install">Installation</h2>
+${codeBlock('bash', `curl -fsSL https://openclaw.ai/install.sh | bash
+openclaw onboard --install-daemon`)}
+<div class="callout tip"><div class="callout-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Tip</div>A Raspberry Pi 5 with 4GB RAM provides an excellent always-on OpenClaw experience for under $60.</div>`
+  },
+
+  // ---- Configuration ----
+  "gateway-setup": {
+    title: "Gateway Setup",
+    section: "Configuration",
+    readTime: 5,
+    updated: "2026-03-28",
+    content: `
+<p>OpenClaw reads configuration from <code>~/.openclaw/openclaw.json</code> — an optional JSON5 file. If missing, safe defaults are used.</p>
+
+<h2 id="editing-config">Editing configuration</h2>
+<p>You have several options:</p>
+<ul>
+<li><strong>Interactive wizard:</strong> <code>openclaw onboard</code> or <code>openclaw configure</code></li>
+<li><strong>CLI one-liners:</strong></li>
+</ul>
+${codeBlock('bash', `openclaw config get agents.defaults.workspace
+openclaw config set agents.defaults.heartbeat.every "2h"
+openclaw config unset plugins.entries.brave.config.webSearch.apiKey`)}
+<ul>
+<li><strong>Control UI:</strong> Open <a href="http://127.0.0.1:18789" target="_blank">http://127.0.0.1:18789</a> → Config tab</li>
+<li><strong>Direct edit:</strong> Edit the JSON file directly — the Gateway watches for changes and hot-reloads</li>
+</ul>
+
+<h2 id="minimal-config">Minimal configuration</h2>
+${codeBlock('json5', `// ~/.openclaw/openclaw.json
+{
+  agents: { defaults: { workspace: "~/.openclaw/workspace" } },
+  channels: { whatsapp: { allowFrom: ["+15555550123"] } },
+}`)}
+
+<h2 id="models">Models and providers</h2>
+${codeBlock('json5', `{
+  agents: {
+    defaults: {
+      model: {
+        primary: "anthropic/claude-sonnet-4-6",
+        fallbacks: ["openai/gpt-5.2"],
+      },
+      models: {
+        "anthropic/claude-sonnet-4-6": { alias: "Sonnet" },
+        "openai/gpt-5.2": { alias: "GPT" },
+      },
+    },
+  },
+}`)}
+
+<h2 id="dm-policy">DM access control</h2>
+<p>Per-channel DM policy options:</p>
+<ul>
+<li><code>"pairing"</code> (default) — unknown senders get a one-time pairing code</li>
+<li><code>"allowlist"</code> — only senders in <code>allowFrom</code></li>
+<li><code>"open"</code> — allow all inbound DMs (requires <code>allowFrom: ["*"]</code>)</li>
+<li><code>"disabled"</code> — ignore all DMs</li>
+</ul>
+
+<div class="callout warning"><div class="callout-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>Strict Validation</div>OpenClaw only accepts configs that fully match the schema. Unknown keys or invalid values cause the Gateway to refuse to start. Run <code>openclaw doctor</code> to diagnose issues.</div>
+`
+  },
+
+  "authentication": {
+    title: "Authentication",
+    section: "Configuration",
+    readTime: 3,
+    updated: "2026-03-28",
+    content: `<p>OpenClaw supports multiple authentication methods to control access to your Gateway.</p>
+<h2 id="gateway-token">Gateway token</h2>
+<p>The Gateway token is set during onboarding and used to authenticate the Control UI and API calls.</p>
+<h2 id="pairing">Pairing</h2>
+<p>The default DM policy is <strong>pairing</strong> — when an unknown user messages your bot, they receive a pairing code. You approve or deny the code via the CLI or Control UI:</p>
+${codeBlock('bash', `openclaw pairing list telegram
+openclaw pairing approve telegram <CODE>`)}
+<p>Pairing codes expire after 1 hour.</p>
+<h2 id="allowlists">Allowlists</h2>
+<p>For stricter control, use allowlists per channel to specify exactly who can message your agent.</p>`
+  },
+
+  "models-providers": {
+    title: "Models & Providers",
+    section: "Configuration",
+    readTime: 4,
+    updated: "2026-03-28",
+    content: `<p>OpenClaw supports multiple AI model providers. Configure your preferred models in <code>openclaw.json</code>.</p>
+<h2 id="supported-providers">Supported providers</h2>
+<ul><li><strong>Anthropic</strong> — Claude Opus, Sonnet, Haiku</li><li><strong>OpenAI</strong> — GPT-5, GPT-4.1, o3</li><li><strong>Google</strong> — Gemini 2.5 Pro, Flash</li><li><strong>Custom</strong> — any OpenAI-compatible API endpoint</li></ul>
+<h2 id="switching-models">Switching models in chat</h2>
+<p>Use the <code>/model</code> slash command to switch models mid-conversation:</p>
+${codeBlock('text', `/model sonnet
+/model gpt`)}
+<p>Model aliases are defined in your config under <code>agents.defaults.models</code>.</p>`
+  },
+
+  "security": {
+    title: "Security & Hardening",
+    section: "Configuration",
+    readTime: 4,
+    updated: "2026-03-28",
+    content: `<p>Best practices for securing your OpenClaw deployment.</p>
+<h2 id="basics">Security basics</h2>
+<ul><li>Use <strong>pairing</strong> (default) or <strong>allowlist</strong> DM policies — never use <code>"open"</code> in production</li>
+<li>Keep your Gateway token secret</li>
+<li>Don't expose port 18789 to the public internet</li>
+<li>Use Tailscale or SSH tunneling for remote access</li></ul>
+<h2 id="sandboxing">Agent sandboxing</h2>
+<p>OpenClaw can sandbox agent tool execution in Docker containers to limit what the agent can do on your system.</p>
+<h2 id="group-security">Group chat security</h2>
+<p>By default, group messages require mentioning the bot. Configure mention patterns per agent to control when the bot responds in groups.</p>`
+  },
+
+  // ---- Skills ----
+  "what-are-skills": {
+    title: "What are Skills?",
+    section: "Skills",
+    readTime: 5,
+    updated: "2026-03-28",
+    content: `
+<p>Skills are the heart of OpenClaw's extensibility. They're modular instruction sets that teach your AI agent how to use specific tools and capabilities.</p>
+
+<h2 id="how-skills-work">How skills work</h2>
+<p>Each skill is a directory containing a <code>SKILL.md</code> file with YAML frontmatter and markdown instructions. OpenClaw loads skills at startup and makes them available to the agent based on environment, config, and binary presence.</p>
+
+${codeBlock('text', `~/.openclaw/workspace/skills/
+├── weather/
+│   └── SKILL.md
+├── github/
+│   └── SKILL.md
+└── my-custom-skill/
+    └── SKILL.md`)}
+
+<h2 id="skill-locations">Skill locations and precedence</h2>
+<p>OpenClaw loads skills from multiple locations (highest to lowest precedence):</p>
+<ol>
+<li><code>&lt;workspace&gt;/skills</code> — workspace skills (highest)</li>
+<li><code>&lt;workspace&gt;/.agents/skills</code> — project agent skills</li>
+<li><code>~/.agents/skills</code> — personal agent skills</li>
+<li><code>~/.openclaw/skills</code> — managed/local skills</li>
+<li>Bundled skills — shipped with OpenClaw</li>
+<li><code>skills.load.extraDirs</code> — extra directories (lowest)</li>
+</ol>
+
+<h2 id="built-in-skills">Built-in skills</h2>
+<p>OpenClaw ships with several built-in skills:</p>
+<ul>
+<li><strong>GitHub</strong> — issues, PRs, CI runs, code review</li>
+<li><strong>Weather</strong> — current weather and forecasts</li>
+<li><strong>tmux</strong> — remote-control tmux sessions</li>
+<li><strong>Healthcheck</strong> — host security hardening</li>
+<li><strong>Skill Creator</strong> — create and edit skills</li>
+</ul>
+
+<h2 id="clawhub">ClawHub marketplace</h2>
+<p>Browse community skills at <a href="https://clawhub.com" target="_blank">clawhub.com</a>. Install with a single command:</p>
+${codeBlock('bash', `openclaw skills install <skill-slug>
+openclaw skills update --all`)}
+
+<h2 id="next">Next steps</h2>
+<p>Ready to build your own? See <a href="#" onclick="navigate('creating-skills');return false">Creating Custom Skills</a>.</p>
+`
+  },
+
+  "built-in-skills": {
+    title: "Built-in Skills",
+    section: "Skills",
+    readTime: 3,
+    updated: "2026-03-28",
+    content: `<p>OpenClaw ships with several production-ready skills:</p>
+<h2 id="github">GitHub</h2><p>Full GitHub operations via the <code>gh</code> CLI: issues, PRs, CI runs, code review, and API queries.</p>
+<h2 id="weather">Weather</h2><p>Get current weather and forecasts for any location via wttr.in or Open-Meteo. No API key needed.</p>
+<h2 id="tmux">tmux</h2><p>Remote-control tmux sessions by sending keystrokes and scraping pane output. Perfect for interactive CLIs.</p>
+<h2 id="healthcheck">Healthcheck</h2><p>Host security hardening and risk-tolerance configuration. Firewall, SSH, updates, and exposure review.</p>
+<h2 id="skill-creator">Skill Creator</h2><p>Meta-skill for creating, editing, and auditing other skills. Use it to build new skills from scratch.</p>`
+  },
+
+  "creating-skills": {
+    title: "Creating Custom Skills",
+    section: "Skills",
+    readTime: 6,
+    updated: "2026-03-28",
+    content: `
+<p>Skills teach the agent how and when to use tools. Here's how to create your own.</p>
+
+<h2 id="create-your-first-skill">Create your first skill</h2>
+
+<div class="steps">
+<div class="step">
+<div class="step-title">Create the skill directory</div>
+${codeBlock('bash', `mkdir -p ~/.openclaw/workspace/skills/hello-world`)}
+</div>
+
+<div class="step">
+<div class="step-title">Write SKILL.md</div>
+<p>Create <code>SKILL.md</code> inside that directory:</p>
+${codeBlock('markdown', `---
+name: hello_world
+description: A simple skill that says hello.
+---
+
+# Hello World Skill
+
+When the user asks for a greeting, use the \`echo\` tool to say
+"Hello from your custom skill!".`)}
+</div>
+
+<div class="step">
+<div class="step-title">Load the skill</div>
+<p>Start a new session so OpenClaw picks up the skill:</p>
+${codeBlock('bash', `# From chat, type:
+/new
+
+# Or restart the gateway:
+openclaw gateway restart
+
+# Verify:
+openclaw skills list`)}
+</div>
+
+<div class="step">
+<div class="step-title">Test it</div>
+${codeBlock('bash', `openclaw agent --message "give me a greeting"`)}
+</div>
+</div>
+
+<h2 id="metadata-reference">Skill metadata reference</h2>
+<table style="width:100%;border-collapse:collapse;margin:16px 0;">
+<thead><tr style="border-bottom:2px solid var(--border);text-align:left;"><th style="padding:8px;">Field</th><th style="padding:8px;">Required</th><th style="padding:8px;">Description</th></tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid var(--border);"><td style="padding:8px;"><code>name</code></td><td style="padding:8px;">Yes</td><td style="padding:8px;">Unique identifier (snake_case)</td></tr>
+<tr style="border-bottom:1px solid var(--border);"><td style="padding:8px;"><code>description</code></td><td style="padding:8px;">Yes</td><td style="padding:8px;">One-line description shown to the agent</td></tr>
+<tr style="border-bottom:1px solid var(--border);"><td style="padding:8px;"><code>metadata.openclaw.os</code></td><td style="padding:8px;">No</td><td style="padding:8px;">OS filter (e.g. <code>["darwin"]</code>, <code>["linux"]</code>)</td></tr>
+<tr style="border-bottom:1px solid var(--border);"><td style="padding:8px;"><code>metadata.openclaw.requires.bins</code></td><td style="padding:8px;">No</td><td style="padding:8px;">Required binaries on PATH</td></tr>
+<tr><td style="padding:8px;"><code>metadata.openclaw.requires.config</code></td><td style="padding:8px;">No</td><td style="padding:8px;">Required config keys</td></tr>
+</tbody></table>
+
+<h2 id="best-practices">Best practices</h2>
+<ul>
+<li><strong>Be concise</strong> — instruct the model on <em>what</em> to do, not how to be an AI</li>
+<li><strong>Safety first</strong> — if your skill uses <code>exec</code>, guard against command injection</li>
+<li><strong>Test locally</strong> — use <code>openclaw agent --message "..."</code> to test before sharing</li>
+<li><strong>Publish to ClawHub</strong> — share your skills with the community via <code>clawhub sync</code></li>
+</ul>
+`
+  },
+
+  "clawhub": {
+    title: "Skill Marketplace (ClawHub)",
+    section: "Skills",
+    readTime: 3,
+    updated: "2026-03-28",
+    content: `<p><a href="https://clawhub.com" target="_blank">ClawHub</a> is the public skills registry for OpenClaw. Browse, install, and publish skills.</p>
+<h2 id="install-skills">Installing skills</h2>
+${codeBlock('bash', `openclaw skills install <skill-slug>
+openclaw skills update --all`)}
+<h2 id="publishing">Publishing your skills</h2>
+${codeBlock('bash', `clawhub sync --all`)}
+<p>The <code>clawhub</code> CLI handles scanning your workspace and publishing updates to the registry.</p>`
+  },
+
+  // ---- Channels ----
+  "telegram": {
+    title: "Telegram",
+    section: "Channels",
+    readTime: 5,
+    updated: "2026-03-28",
+    content: `
+<p>Telegram is the <strong>fastest channel to set up</strong> — just a bot token from BotFather and you're live.</p>
+
+<h2 id="setup">Setup steps</h2>
+
+<div class="steps">
+<div class="step">
+<div class="step-title">Create a bot with BotFather</div>
+<p>Open Telegram and message <strong>@BotFather</strong>. Run <code>/newbot</code>, follow the prompts, and save the bot token.</p>
+</div>
+
+<div class="step">
+<div class="step-title">Configure the token</div>
+${codeBlock('json5', `// ~/.openclaw/openclaw.json
+{
+  channels: {
+    telegram: {
+      enabled: true,
+      botToken: "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11",
+      dmPolicy: "pairing",
+      groups: { "*": { requireMention: true } },
+    },
+  },
+}`)}
+<p>Or set via environment variable: <code>TELEGRAM_BOT_TOKEN=...</code></p>
+</div>
+
+<div class="step">
+<div class="step-title">Start the Gateway and approve your DM</div>
+${codeBlock('bash', `openclaw gateway restart
+# Send a message to your bot in Telegram
+# Then approve the pairing:
+openclaw pairing list telegram
+openclaw pairing approve telegram <CODE>`)}
+<p>Pairing codes expire after 1 hour.</p>
+</div>
+
+<div class="step">
+<div class="step-title">Add to groups (optional)</div>
+<p>Add the bot to your Telegram group. Configure group access and mention patterns in the config.</p>
+</div>
+</div>
+
+<h2 id="privacy-mode">Privacy mode</h2>
+<p>Telegram bots default to <strong>Privacy Mode</strong>, which limits what group messages they receive. Disable it in BotFather (<code>/mybots</code> → Bot Settings → Group Privacy → Turn Off) if you want the bot to see all group messages.</p>
+
+<div class="callout tip"><div class="callout-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Tip</div>Telegram uses long polling by default. Webhook mode is also available for advanced setups behind a reverse proxy.</div>
+`
+  },
+
+  "whatsapp": {
+    title: "WhatsApp",
+    section: "Channels",
+    readTime: 5,
+    updated: "2026-03-28",
+    content: `
+<p>WhatsApp connects via WhatsApp Web (Baileys library). You link your phone number just like WhatsApp Web on a browser.</p>
+
+<h2 id="setup">Setup steps</h2>
+
+<div class="steps">
+<div class="step">
+<div class="step-title">Install the WhatsApp plugin</div>
+${codeBlock('bash', `openclaw plugins install @openclaw/whatsapp`)}
+<p>Or it will be installed automatically when you first select WhatsApp during onboarding.</p>
+</div>
+
+<div class="step">
+<div class="step-title">Configure access policy</div>
+${codeBlock('json5', `// ~/.openclaw/openclaw.json
+{
+  channels: {
+    whatsapp: {
+      dmPolicy: "pairing",
+      allowFrom: ["+15551234567"],
+      groupPolicy: "allowlist",
+      groupAllowFrom: ["+15551234567"],
+    },
+  },
+}`)}
+</div>
+
+<div class="step">
+<div class="step-title">Link WhatsApp (QR)</div>
+${codeBlock('bash', `openclaw channels login --channel whatsapp`)}
+<p>A QR code will appear. Scan it with your phone (WhatsApp → Linked Devices → Link a Device).</p>
+<p>For a specific account:</p>
+${codeBlock('bash', `openclaw channels login --channel whatsapp --account work`)}
+</div>
+
+<div class="step">
+<div class="step-title">Start the Gateway</div>
+${codeBlock('bash', `openclaw gateway restart`)}
+</div>
+</div>
+
+<div class="callout warning"><div class="callout-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>Important</div>WhatsApp Web sessions can be revoked from your phone at any time. If the connection drops, re-run <code>openclaw channels login --channel whatsapp</code>.</div>
+`
+  },
+
+  "discord": {
+    title: "Discord",
+    section: "Channels",
+    readTime: 3,
+    updated: "2026-03-28",
+    content: `<p>Connect OpenClaw to a Discord bot for server and DM interactions.</p>
+<h2 id="setup">Setup</h2>
+<ol><li>Create a Discord Application at <a href="https://discord.com/developers" target="_blank">discord.com/developers</a></li>
+<li>Create a Bot under your application and copy the token</li>
+<li>Configure in <code>openclaw.json</code>:</li></ol>
+${codeBlock('json5', `{
+  channels: {
+    discord: {
+      enabled: true,
+      botToken: "YOUR_DISCORD_BOT_TOKEN",
+      dmPolicy: "pairing",
+    },
+  },
+}`)}
+<ol start="4"><li>Invite the bot to your server using the OAuth2 URL generator with <code>bot</code> and <code>applications.commands</code> scopes</li></ol>`
+  },
+
+  "slack": {
+    title: "Slack",
+    section: "Channels",
+    readTime: 3,
+    updated: "2026-03-28",
+    content: `<p>OpenClaw supports Slack via Socket Mode (recommended) or HTTP Events API.</p>
+<h2 id="setup">Setup</h2>
+<ol><li>Create a Slack App at <a href="https://api.slack.com/apps" target="_blank">api.slack.com/apps</a></li>
+<li>Enable Socket Mode and subscribe to relevant events</li>
+<li>Install the app to your workspace</li>
+<li>Configure in <code>openclaw.json</code> with your bot and app tokens</li></ol>`
+  },
+
+  "imessage": {
+    title: "iMessage",
+    section: "Channels",
+    readTime: 3,
+    updated: "2026-03-28",
+    content: `<p>iMessage support requires a Mac running BlueBubbles server.</p>
+<h2 id="setup">Setup</h2>
+<ol><li>Install <a href="https://bluebubbles.app" target="_blank">BlueBubbles</a> on your Mac</li>
+<li>Configure the BlueBubbles webhook to point to your OpenClaw Gateway</li>
+<li>Set up the iMessage channel in <code>openclaw.json</code></li></ol>
+<div class="callout info"><div class="callout-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Note</div>iMessage requires macOS. It cannot run on Linux or Windows.</div>`
+  },
+
+  // ---- Advanced ----
+  "multi-agent": {
+    title: "Multi-Agent Setup",
+    section: "Advanced",
+    readTime: 4,
+    updated: "2026-03-28",
+    content: `<p>Run multiple AI agents with separate workspaces, models, and channel routing.</p>
+<h2 id="overview">Overview</h2>
+<p>OpenClaw supports isolated sessions per agent. Each agent gets its own workspace, skills, and configuration. Messages are routed to the correct agent based on channel, sender, or explicit routing rules.</p>
+<h2 id="configuration">Configuration</h2>
+<p>Define multiple agents in your config, each with their own workspace and model settings. See the <a href="https://docs.openclaw.ai/concepts/multi-agent" target="_blank">multi-agent documentation</a> for details.</p>`
+  },
+
+  "memory-sessions": {
+    title: "Memory & Sessions",
+    section: "Advanced",
+    readTime: 3,
+    updated: "2026-03-28",
+    content: `<p>OpenClaw provides persistent memory through workspace files and session management.</p>
+<h2 id="sessions">Sessions</h2>
+<p>Each conversation gets an isolated session. Use <code>/new</code> to start a fresh session, or configure per-sender/per-channel session isolation.</p>
+<h2 id="memory">Memory</h2>
+<p>Agents persist memory through workspace files (MEMORY.md, daily notes). The agent reads these files at session start to maintain continuity across conversations.</p>`
+  },
+
+  "heartbeats-cron": {
+    title: "Heartbeats & Cron",
+    section: "Advanced",
+    readTime: 3,
+    updated: "2026-03-28",
+    content: `<p>Heartbeats let your agent perform periodic background tasks. Cron jobs enable precise scheduled execution.</p>
+<h2 id="heartbeats">Heartbeats</h2>
+<p>Configure heartbeat intervals so your agent periodically checks email, calendar, weather, or any custom tasks.</p>
+<h2 id="cron">Cron</h2>
+<p>For exact timing, use OpenClaw's cron system to schedule tasks like reminders, reports, or periodic checks.</p>`
+  },
+
+  "mcp-servers": {
+    title: "MCP Servers",
+    section: "Advanced",
+    readTime: 3,
+    updated: "2026-03-28",
+    content: `<p>OpenClaw supports the Model Context Protocol (MCP) for connecting external tool servers.</p>
+<h2 id="what-is-mcp">What is MCP?</h2>
+<p>MCP is a standard protocol for providing tools and context to AI models. OpenClaw can connect to any MCP-compatible server to extend the agent's capabilities.</p>
+<h2 id="configuration">Configuration</h2>
+<p>Configure MCP servers in your <code>openclaw.json</code> under the plugins section.</p>`
+  },
+
+  "webhooks": {
+    title: "Webhooks",
+    section: "Advanced",
+    readTime: 2,
+    updated: "2026-03-28",
+    content: `<p>Trigger agent actions via incoming webhooks or send notifications to external services.</p>
+<p>Webhook configuration is available in the Gateway settings. See the configuration reference for details.</p>`
+  },
+
+  // ---- Community ----
+  "github-repo": {
+    title: "GitHub Repository",
+    section: "Community & Resources",
+    readTime: 1,
+    updated: "2026-03-28",
+    content: `<p>OpenClaw is open source and hosted on GitHub.</p>
+<ul><li><strong>Repository:</strong> <a href="https://github.com/openclaw" target="_blank">github.com/openclaw</a></li>
+<li><strong>License:</strong> MIT</li>
+<li><strong>Stars:</strong> Growing community of developers</li></ul>
+<p>Issues, pull requests, and discussions are all welcome!</p>`
+  },
+
+  "discord-community": {
+    title: "Discord Community",
+    section: "Community & Resources",
+    readTime: 1,
+    updated: "2026-03-28",
+    content: `<p>Join the OpenClaw Discord community for help, discussions, and showcasing your setups.</p>
+<p>The Discord server is the best place to get help, share ideas, and connect with other OpenClaw users and developers.</p>`
+  },
+
+  "contributing": {
+    title: "Contributing",
+    section: "Community & Resources",
+    readTime: 2,
+    updated: "2026-03-28",
+    content: `<p>OpenClaw welcomes contributions of all kinds — code, documentation, skills, bug reports, and feature requests.</p>
+<h2 id="how-to-contribute">How to contribute</h2>
+<ol><li>Fork the repository on GitHub</li>
+<li>Create a feature branch</li>
+<li>Make your changes</li>
+<li>Submit a pull request</li></ol>
+<p>See the <a href="https://github.com/openclaw" target="_blank">GitHub repository</a> for contribution guidelines.</p>`
+  },
+};
+
+// ============ NAVIGATION STRUCTURE ============
+const sections = [
+  { title: "Getting Started", items: [
+    { id: "what-is-openclaw", title: "What is OpenClaw?" },
+    { id: "why-openclaw", title: "Why OpenClaw?" },
+    { id: "quick-start", title: "Quick Start" },
+    { id: "architecture", title: "Architecture Overview" },
+  ]},
+  { title: "Installation", items: [
+    { id: "ubuntu", title: "Ubuntu / Debian" },
+    { id: "macos", title: "macOS" },
+    { id: "docker", title: "Docker" },
+    { id: "azure", title: "Azure VM" },
+    { id: "kubernetes", title: "Kubernetes" },
+    { id: "raspberry-pi", title: "Raspberry Pi" },
+  ]},
+  { title: "Configuration", items: [
+    { id: "gateway-setup", title: "Gateway Setup" },
+    { id: "authentication", title: "Authentication" },
+    { id: "models-providers", title: "Models & Providers" },
+    { id: "security", title: "Security & Hardening" },
+  ]},
+  { title: "Skills", items: [
+    { id: "what-are-skills", title: "What are Skills?" },
+    { id: "built-in-skills", title: "Built-in Skills" },
+    { id: "creating-skills", title: "Creating Custom Skills" },
+    { id: "clawhub", title: "ClawHub Marketplace" },
+  ]},
+  { title: "Channels", items: [
+    { id: "telegram", title: "Telegram" },
+    { id: "whatsapp", title: "WhatsApp" },
+    { id: "discord", title: "Discord" },
+    { id: "slack", title: "Slack" },
+    { id: "imessage", title: "iMessage" },
+  ]},
+  { title: "Advanced", items: [
+    { id: "multi-agent", title: "Multi-Agent Setup" },
+    { id: "memory-sessions", title: "Memory & Sessions" },
+    { id: "heartbeats-cron", title: "Heartbeats & Cron" },
+    { id: "mcp-servers", title: "MCP Servers" },
+    { id: "webhooks", title: "Webhooks" },
+  ]},
+  { title: "Community & Resources", items: [
+    { id: "github-repo", title: "GitHub Repository" },
+    { id: "discord-community", title: "Discord Community" },
+    { id: "clawhub", title: "ClawHub (Skills)" },
+    { id: "contributing", title: "Contributing" },
+  ]},
+];
+
+// Flat list for nav
+const allItems = sections.flatMap(s => s.items);
+
+// ============ HELPERS ============
+function codeBlock(lang, code) {
+  const escaped = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return `<div class="code-block"><div class="code-header"><span class="lang">${lang}</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><pre><code>${escaped}</code></pre></div>`;
+}
+
+function copyCode(btn) {
+  const code = btn.closest('.code-block').querySelector('code').textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ============ RENDER ============
+function renderSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.innerHTML = sections.map(s => `
+    <div class="sidebar-section">
+      <div class="sidebar-title">${s.title}</div>
+      ${s.items.map(item => `<a class="sidebar-link" data-id="${item.id}" onclick="navigate('${item.id}')">${item.title}</a>`).join('')}
+    </div>
+  `).join('');
+}
+
+function getArticlePath(id) {
+  const art = articles[id];
+  if (!art) return '';
+  const sectionMap = { 'Getting Started': 'getting-started', 'Installation': 'installation', 'Configuration': 'configuration', 'Skills': 'skills', 'Channels': 'channels', 'Advanced': 'advanced', 'Community & Resources': 'community' };
+  return `${sectionMap[art.section] || 'misc'}/${id}`;
+}
+
+function renderArticle(id) {
+  const art = articles[id];
+  if (!art) return;
+  const path = getArticlePath(id);
+  const main = document.getElementById('mainContent');
+  
+  // Find prev/next
+  const flatIds = allItems.map(i => i.id);
+  const uniqueIds = [...new Set(flatIds)];
+  const idx = uniqueIds.indexOf(id);
+  const prev = idx > 0 ? articles[uniqueIds[idx-1]] : null;
+  const prevId = idx > 0 ? uniqueIds[idx-1] : null;
+  const next = idx < uniqueIds.length-1 ? articles[uniqueIds[idx+1]] : null;
+  const nextId = idx < uniqueIds.length-1 ? uniqueIds[idx+1] : null;
+
+  main.innerHTML = `
+    <div class="fade-in">
+      <div class="breadcrumb">
+        <a onclick="navigate('what-is-openclaw')">Home</a>
+        <span class="sep">›</span>
+        <span>${art.section}</span>
+        <span class="sep">›</span>
+        <span>${art.title}</span>
+      </div>
+      <div class="article">
+        <h1>${art.title}</h1>
+        <div class="article-meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>${art.readTime} min read</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Updated ${art.updated}</span>
+        </div>
+        ${art.content}
+      </div>
+      <div class="article-footer">
+        <a href="https://github.com/itziktdk/openclaw-learn/tree/main/content/${path}.md" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit this page on GitHub
+        </a>
+        <a href="https://github.com/itziktdk/openclaw-learn/issues/new" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          Report an issue
+        </a>
+      </div>
+      <div class="article-nav">
+        ${prev ? `<div class="nav-link" onclick="navigate('${prevId}')"><div class="nav-link-label">← Previous</div><div class="nav-link-title">${prev.title}</div></div>` : '<div></div>'}
+        ${next ? `<div class="nav-link next" onclick="navigate('${nextId}')"><div class="nav-link-label">Next →</div><div class="nav-link-title">${next.title}</div></div>` : '<div></div>'}
+      </div>
+    </div>
+  `;
+
+  // Update sidebar active
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.toggle('active', l.dataset.id === id));
+
+  // Build TOC
+  buildTOC();
+  
+  // Scroll to top
+  window.scrollTo(0, 0);
+}
+
+function buildTOC() {
+  const toc = document.getElementById('toc');
+  const headings = document.querySelectorAll('.article h2, .article h3');
+  if (headings.length === 0) { toc.innerHTML = ''; return; }
+  toc.innerHTML = `<div class="toc-title">On this page</div>` + 
+    Array.from(headings).map(h => {
+      const depth = h.tagName === 'H3' ? 'depth-3' : '';
+      return `<a class="toc-link ${depth}" href="#${h.id}" onclick="event.preventDefault();document.getElementById('${h.id}').scrollIntoView({behavior:'smooth'})">${h.textContent}</a>`;
+    }).join('');
+}
+
+function navigate(id) {
+  if (!articles[id]) return;
+  history.pushState({ id }, '', `#${id}`);
+  renderArticle(id);
+  // Close sidebar on mobile
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+// ============ SEARCH ============
+function openSearch() {
+  document.getElementById('searchOverlay').classList.add('active');
+  document.getElementById('searchInput').focus();
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').innerHTML = '<div class="search-empty">Type to search across all documentation</div>';
+}
+
+function closeSearch() {
+  document.getElementById('searchOverlay').classList.remove('active');
+}
+
+function doSearch(query) {
+  const results = document.getElementById('searchResults');
+  if (!query.trim()) { results.innerHTML = '<div class="search-empty">Type to search across all documentation</div>'; return; }
+  const q = query.toLowerCase();
+  const matches = Object.entries(articles).filter(([id, art]) => 
+    art.title.toLowerCase().includes(q) || art.content.toLowerCase().includes(q) || art.section.toLowerCase().includes(q)
+  ).slice(0, 10);
+  
+  if (matches.length === 0) { results.innerHTML = '<div class="search-empty">No results found</div>'; return; }
+  results.innerHTML = matches.map(([id, art]) => `
+    <div class="search-result" onclick="navigate('${id}');closeSearch()">
+      <div class="search-result-title">${art.title}</div>
+      <div class="search-result-section">${art.section}</div>
+    </div>
+  `).join('');
+}
+
+// ============ THEME ============
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  updateThemeIcons();
+}
+
+function updateThemeIcons() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.querySelector('.sun-icon').style.display = isDark ? 'none' : 'block';
+  document.querySelector('.moon-icon').style.display = isDark ? 'block' : 'none';
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ============ INIT ============
+(function init() {
+  // Theme
+  const saved = localStorage.getItem('theme');
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+  updateThemeIcons();
+
+  // Render
+  renderSidebar();
+  const hash = location.hash.slice(1) || 'what-is-openclaw';
+  renderArticle(articles[hash] ? hash : 'what-is-openclaw');
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
+    if (e.key === 'Escape') closeSearch();
+  });
+
+  // Popstate
+  window.addEventListener('popstate', e => {
+    const id = e.state?.id || location.hash.slice(1) || 'what-is-openclaw';
+    renderArticle(articles[id] ? id : 'what-is-openclaw');
+  });
+
+  // Scrollspy for TOC
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(() => {
+      const headings = document.querySelectorAll('.article h2, .article h3');
+      let active = '';
+      headings.forEach(h => { if (h.getBoundingClientRect().top < 120) active = h.id; });
+      document.querySelectorAll('.toc-link').forEach(l => l.classList.toggle('active', l.getAttribute('href') === `#${active}`));
+      ticking = false;
+    }); ticking = true; }
+  });
+})();
+</script>
+</body>
+</html>
